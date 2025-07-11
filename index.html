@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+  <div style="text-align:center; margin-bottom: 20px;">
+    <img src="logo.png" alt="Logo" style="max-width: 200px; height: auto;" />
+  </div>
+
+  <meta charset="UTF-8" />
+  <title>Calculadora de Preço Médio + Bonificação</title>
+  <style>
+    body {
+      font-family: Calibri, sans-serif;
+      background-color: #006400;
+      color: #fff;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      margin-top: 40px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: #ffffff;
+      color: #000;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    .lembrete {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    .lembrete-box {
+      background-color: #fff;
+      color: #000;
+      padding: 10px 20px;
+      font-weight: bold;
+      border-radius: 8px;
+    }
+    select, input[type="number"], input[type="text"] {
+      padding: 6px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      width: 100%;
+      font-family: Calibri, sans-serif;
+    }
+    #informativoBonificacao {
+      margin-top: 30px;
+      font-size: 1.2em;
+      text-align: center;
+      background-color: #ffffff;
+      color: #000;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    #totalResumo {
+      background-color: #dcdcdc;
+      font-weight: bold;
+    }
+    #caixa36PosBonificacao {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #ffffff;
+      color: #000;
+      font-weight: bold;
+      font-size: 1.2em;
+      border-radius: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Calculadora de Preço Médio</h2>
+
+  <div class="lembrete">
+    <div class="lembrete-box">VALOR MÍNIMO (COM MIX): R$ 28,00</div>
+    <div class="lembrete-box">VALOR MÍNIMO (SEM MIX): R$ 28,30</div>
+  </div>
+
+  <!-- Primeira Tabela -->
+  <table>
+    <thead>
+      <tr>
+        <th>Família</th>
+        <th>Quantidade</th>
+        <th>Preço Unitário</th>
+        <th>Faturamento</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <select id="familiaSelect" onchange="atualizaPreco()">
+            <option value="Caixa36" selected>Caixa 36</option>
+            <option value="Caixa24">Caixa 24</option>
+            <option value="Pet">Pet 250</option>
+            <option value="Agua">Água 12</option>
+            <option value="1.5L">1,5L</option>
+            <option value="Concentrado">Concentrado</option>
+            <option value="Concentrado37">Concentrado 37%</option>
+            <option value="Bombona">Bombona</option>
+            <option value="Ginseng">Ginseng</option>
+            <option value="Energetico">Energético Lata</option>
+          </select>
+        </td>
+        <td><input id="caixa36QtdInput" type="number" oninput="atualizaPreco()" min="0" value="168" /></td>
+        <td><input id="caixa36PrecoInput" type="number" readonly /></td>
+        <td><input id="fatCaixa36Input" type="number" readonly /></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div id="informativoBonificacao">
+    Mínimo para Bonificação: <span id="bonificacaoMinimaTexto">0</span> unidades (7% da quantidade de Caixa 36)
+  </div>
+
+  <!-- Segunda Tabela - Resumo -->
+  <table>
+    <thead>
+      <tr>
+        <th>PRODUTO VENDA</th>
+        <th>QTD</th>
+        <th>R$ UNIDADE</th>
+        <th>TOTAL R$</th>
+      </tr>
+    </thead>
+    <tbody id="resumoTabela">
+      <tr><td>Caixa 36</td><td><input type="number" oninput="calculaResumo(this, 'Caixa36')" min="0" /></td><td><input readonly></td><td><input readonly></td></tr>
+      <tr><td>Caixa 24</td><td><input type="number" oninput="calculaResumo(this, 'Caixa24')" min="0" /></td><td><input readonly></td><td><input readonly></td></tr>
+      <tr><td>Pet 250</td><td><input type="number" oninput="calculaResumo(this, 'Pet')" min="0" /></td><td><input readonly></td><td><input readonly></td></tr>
+      <tr><td>Água 12</td><td><input type="number" oninput="calculaResumo(this, 'Agua')" min="0" /></td><td><input readonly></td><td><input readonly></td></tr>
+      <tr><td>1,5L</td><td><input type="number" oninput="calculaResumo(this, '1.5L')" min="0" /></td><td><input readonly></td><td><input readonly></td></tr>
+      <tr><td>Concentrado</td><td><input type="number" oninput="calculaResumo(this, 'Concentrado')" min="0" /></td><td><input readonly></td><td><input readonly></td></tr>
+      <tr><td>Concentrado 37%</td><td><input type="number" oninput="calculaResumo(this, 'Concentrado37')" min="0" /></td><td><input readonly></td><td><input readonly></td></tr>
+      <tr><td>Bombona</td><td><input type="number" oninput="calculaResumo(this, 'Bombona')" min="0" /></td><td><input readonly></td><td><input readonly></td></tr>
+      <tr><td>Ginseng</td><td><input type="number" oninput="calculaResumo(this, 'Ginseng')" min="0" /></td><td><input readonly></td><td><input readonly></td></tr>
+      <tr><td>Energético Lata</td><td><input type="number" oninput="calculaResumo(this, 'Energetico')" min="0" /></td><td><input readonly></td><td><input readonly></td></tr>
+    </tbody>
+    <tfoot>
+      <tr id="totalResumo">
+        <td>Total</td>
+        <td><input readonly id="totalQtd" /></td>
+        <td></td>
+        <td><input readonly id="totalFat" /></td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <!-- Tabela Bonificação -->
+  <h2>Tabela de Bonificação</h2>
+  <table id="tabelaBonificacao">
+    <thead>
+      <tr>
+        <th>BONIFICAÇÃO</th>
+        <th>QTD</th>
+        <th>R$ UNIDADE</th>
+        <th>TOTAL</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Pet 250</td>
+        <td><input type="number" class="qtd" oninput="calcularLinha(this)" /></td>
+        <td class="preco">11.10</td>
+        <td><input type="text" class="total" readonly /></td>
+      </tr>
+      <tr>
+        <td>1,5L</td>
+        <td><input type="number" class="qtd" oninput="calcularLinha(this)" /></td>
+        <td class="preco">22.65</td>
+        <td><input type="text" class="total" readonly /></td>
+      </tr>
+      <tr>
+        <td>Ginseng</td>
+        <td><input type="number" class="qtd" oninput="calcularLinha(this)" /></td>
+        <td class="preco">21.25</td>
+        <td><input type="text" class="total" readonly /></td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3" style="text-align:right; font-weight:bold;">TOTAL BONIFICAÇÃO (R$):</td>
+        <td><input type="text" id="totalBonificacao" readonly /></td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+  <thead>
+    <tr style="background-color: #228B22; color: white; font-weight: bold;">
+      <th colspan="3">RESUMO</th>
+    </tr>
+    <tr style="background-color: black; color: white;">
+      <th>VALOR FINAL</th>
+      <th>FAMÍLIAS</th>
+      <th>SITUAÇÃO</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="checkValorFinal" style="text-align: center; font-size: 20px; background-color: #d1f0d1;">✔️</td>
+      <td id="checkFamilias" style="text-align: center; font-size: 20px; background-color: #d1f0d1;">✔️</td>
+      <td id="statusFinal" style="text-align: center; font-weight: bold;">APROVADA</td>
+    </tr>
+  </tbody>
+</table>
+
+  <div id="caixa36PosBonificacao">
+    CAIXA 36 PÓS BONIFICAÇÃO: R$ <span id="precoCaixa36Final">0,00</span>
+  </div>
+
+  <script>
+     const precos = {
+      Caixa36: [28.75, 29.85, 30.80, 31.60, 32.60],
+      Caixa24: [19.85, 20.65, 21.30, 21.80, 22.45],
+      Pet:     [9.85, 10.30, 10.55, 10.75, 11.10],
+      Agua:    [9.10, 9.30, 9.50, 9.70, 9.90],
+      "1.5L":  [19.95, 20.75, 21.40, 21.95, 22.65],
+      Concentrado: [88.00, 91.90, 94.95, 97.15, 99.95],
+      Concentrado37: [88.00, 91.90, 94.95, 97.15, 99.95],
+      Bombona: [33.35, 34.60, 35.45, 36.10, 37.15],
+      Ginseng: [19.00, 19.70, 20.35, 20.80, 21.25],
+      Energetico: [4.00, 4.20, 4.40, 4.60, 4.80]
+    };
+
+    function faixaIndice(qtd) {
+      if (qtd >= 168) return 0;
+      if (qtd >= 51) return 1;
+      if (qtd >= 26) return 2;
+      if (qtd >= 6) return 3;
+      return 4;
+    }
+
+    function atualizaPreco() {
+      const qtd = parseFloat(document.getElementById("caixa36QtdInput").value || 0);
+      const familia = document.getElementById("familiaSelect").value;
+      const preco = precos[familia][faixaIndice(qtd)];
+      document.getElementById("caixa36PrecoInput").value = preco.toFixed(2);
+      const fat = qtd * preco;
+      document.getElementById("fatCaixa36Input").value = fat.toFixed(2);
+      document.getElementById("bonificacaoMinimaTexto").innerText = Math.floor(qtd * 0.07);
+      atualizarTotais();
+    }
+
+    function calculaResumo(input, familia) {
+      const linha = input.parentElement.parentElement;
+      const qtd = parseFloat(input.value || 0);
+      const preco = precos[familia][faixaIndice(qtd)];
+      linha.children[2].children[0].value = preco.toFixed(2);
+      linha.children[3].children[0].value = (qtd * preco).toFixed(2);
+      atualizarTotais();
+    }
+
+    function calcularLinha(input) {
+      const linha = input.parentElement.parentElement;
+      const qtd = parseFloat(input.value) || 0;
+      const preco = parseFloat(linha.querySelector(".preco").textContent.replace(",", ".")) || 0;
+      const total = qtd * preco;
+      linha.querySelector(".total").value = total.toFixed(2).replace(".", ",");
+      calcularBonificacao();
+    }
+
+    function calcularBonificacao() {
+      const linhas = document.querySelectorAll("#tabelaBonificacao tbody tr");
+      let totalGeral = 0;
+
+      linhas.forEach(linha => {
+        const qtd = parseFloat(linha.querySelector("input[type='number']").value) || 0;
+        const preco = parseFloat(linha.querySelector(".preco").textContent.replace(",", ".")) || 0;
+        const total = qtd * preco;
+        linha.querySelector(".total").value = total.toFixed(2).replace(",", ".");
+        totalGeral += total;
+      });
+
+      document.getElementById("totalBonificacao").value = totalGeral.toFixed(2).replace(".", ",");
+
+      atualizarTotais();
+    }
+
+    function atualizarTotais() {
+  const qtdPrincipal = parseFloat(document.getElementById("caixa36QtdInput").value) || 0;
+  const fatPrincipal = parseFloat(document.getElementById("fatCaixa36Input").value) || 0;
+
+  // Bonificação total
+  let totalBonificacao = 0;
+  document.querySelectorAll("#tabelaBonificacao .total").forEach(input => {
+    const valor = parseFloat(input.value.replace(",", ".")) || 0;
+    totalBonificacao += valor;
+  });
+
+  // Preço final da Caixa 36 após bonificação
+  let precoFinalCaixa36 = 0;
+  if (qtdPrincipal > 0) {
+    precoFinalCaixa36 = (fatPrincipal - totalBonificacao) / qtdPrincipal;
+  }
+  document.getElementById("precoCaixa36Final").innerText = precoFinalCaixa36.toFixed(2).replace(".", ",");
+
+  // Total geral
+  let totalQtd = qtdPrincipal;
+  let totalFat = fatPrincipal;
+
+  document.querySelectorAll("#resumoTabela tr").forEach(tr => {
+    const qtd = parseFloat(tr.children[1].querySelector("input").value) || 0;
+    const fat = parseFloat(tr.children[3].querySelector("input").value) || 0;
+    totalQtd += qtd;
+    totalFat += fat;
+  });
+
+  document.getElementById("totalQtd").value = totalQtd;
+  document.getElementById("totalFat").value = totalFat.toFixed(2);
+
+  // Verificações para resumo
+  const bonifMinima = Math.floor(qtdPrincipal * 0.07);
+
+  let bonifQtd = 0;
+  document.querySelectorAll("#resumoTabela tr").forEach(linha => {
+    bonifQtd += parseFloat(linha.children[1].querySelector("input").value) || 0;
+  });
+
+  // Verifica separadamente cada critério
+  const valorFinalOk = precoFinalCaixa36 >= 28;
+  const familiasOk = bonifQtd >= bonifMinima;
+
+  // Atualiza os checks separadamente
+  document.getElementById("checkValorFinal").innerText = valorFinalOk ? "✔️" : "❌";
+  document.getElementById("checkFamilias").innerText = familiasOk ? "✔️" : "❌";
+
+  // Status final só aprovado se os dois forem verdadeiros
+  const status = (valorFinalOk && familiasOk) ? "APROVADA" : "RECUSADA";
+  document.getElementById("statusFinal").innerText = status;
+}
+
+
+
+
+    window.onload = () => {
+      atualizaPreco();
+      calcularBonificacao();
+    };
+
+
+  </script>
+
+</body>
+</html>
